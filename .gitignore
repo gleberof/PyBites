@@ -1,0 +1,11 @@
+# file: ~/.gitignore
+.DS_Store
+.idea
+.pytest_cache
+__pycache__
+
+old
+tmp
+venv
+*.zip
+*.txt
