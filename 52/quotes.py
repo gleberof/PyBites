@@ -52,24 +52,24 @@ def get_quote(qid):
 @app.route('/api/quotes', methods=['POST'])
 def create_quote():
     ins = request.get_json()
-    if len(ins) == 0:
+    if len(ins) == 0 or 'quote' not in ins or 'movie' not in ins or _quote_exists(ins['quote']):
         return '', 400
     ins['id'] = len(quotes) + 1
     quotes.append(ins)
-    print(ins)
     return jsonify({'quote': ins}), 201
 
 
 @app.route('/api/quotes/<int:qid>', methods=['PUT'])
 def update_quote(qid):
     upd = _get_quote(qid)
+    upd_new = request.get_json()
     if upd:
-        upd_id = quotes.index(request.get_json())
-        if len(upd) == 0:
+        upd_id = quotes.index(upd)
+        if len(upd_new) == 0:
             return '', 400
-        for k,v in request.get_json().items():
+        for k,v in upd_new.items():
             quotes[upd_id][k] = v
-        return '', 200
+        return jsonify({'quote': quotes[upd_id]}), 200
     else:
         return '', 404
 
